@@ -1,0 +1,34 @@
+name: ieee_mvp
+description: An entry to the IEEE contest.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^0.21.0
+  equatable: ^0.6.1
+  shared_preferences: ^0.5.3+4
+  location: ^2.3.5
+  geocoder: ^0.2.1
+  flutter_slidable: ^0.5.4
+  mapbox_gl: ^0.0.4
+  moor_flutter: ^1.5.0
+  moor: ^1.5.1
+  get_it: ^2.0.1
+  dartz: ^0.8.6
+  connectivity: ^0.4.5+3
+  http: ^0.12.0+2
+  cupertino_icons: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^4.1.0
+  moor_generator: ^1.5.0
+  build_runner:
+
+flutter:
+  uses-material-design: true
