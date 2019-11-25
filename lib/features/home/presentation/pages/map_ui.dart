@@ -26,8 +26,8 @@ class MapUiBodyState extends State<MapUiBody> {
   );
 
   MapboxMapController mapController;
-  CameraPosition _position = _kInitialPosition;
-  bool _isMoving = false;
+//  CameraPosition _position = _kInitialPosition;
+//  bool _isMoving = false;
   bool _compassEnabled = true;
   CameraTargetBounds _cameraTargetBounds = CameraTargetBounds.unbounded;
   MinMaxZoomPreference _minMaxZoomPreference = MinMaxZoomPreference.unbounded;
@@ -39,22 +39,22 @@ class MapUiBodyState extends State<MapUiBody> {
   bool _myLocationEnabled = true;
   MyLocationTrackingMode _myLocationTrackingMode = MyLocationTrackingMode.Tracking;
 
-  void _onMapChanged() {
-    setState(() {
-      _extractMapInfo();
-    });
-  }
+//  void _onMapChanged() {
+//    setState(() {
+//      _extractMapInfo();
+//    });
+//  }
+//
+//  void _extractMapInfo() {
+//    _position = mapController.cameraPosition;
+//    _isMoving = mapController.isCameraMoving;
+//  }
 
-  void _extractMapInfo() {
-    _position = mapController.cameraPosition;
-    _isMoving = mapController.isCameraMoving;
-  }
-
-  @override
-  void dispose() {
-    mapController.removeListener(_onMapChanged);
-    super.dispose();
-  }
+//  @override
+//  void dispose() {
+//    mapController.removeListener(_onMapChanged);
+//    super.dispose();
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +93,8 @@ class MapUiBodyState extends State<MapUiBody> {
 
   void onMapCreated(MapboxMapController controller) {
     mapController = controller;
-    mapController.addListener(_onMapChanged);
-    _extractMapInfo();
+//    mapController.addListener(_onMapChanged);
+//    _extractMapInfo();
     setState(() {});
   }
 }
