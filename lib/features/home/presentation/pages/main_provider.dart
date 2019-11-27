@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ieee_mvp/features/home/domain/entities/order.dart';
+import 'package:ieee_mvp/features/home/presentation/pages/map_page.dart';
 import 'package:location/location.dart';
 
 import 'map_ui.dart';
@@ -140,7 +141,7 @@ class _MainProviderState extends State<MainProvider> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      _pushPage(context, MapUI());
+                      _pushPage(context, MapPage());
                     },
                   ),
                 ],
