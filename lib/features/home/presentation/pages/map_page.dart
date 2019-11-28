@@ -7,8 +7,11 @@ import 'package:ieee_mvp/notification_service.dart';
 import 'package:location/location.dart';
 
 class MapPage extends StatefulWidget {
+  final double lat;
+  final double long;
+
   const MapPage({
-    Key key,
+    Key key, this.lat, this.long,
   }) : super(key: key);
 
   @override
@@ -22,16 +25,16 @@ class MapPageState extends State<MapPage> {
   var location = Location();
   CameraPosition selectedLocation;
 
+  int quantity = 0;
+
   @override
   void initState() {
     super.initState();
     initialPosition = CameraPosition(
-      target: LatLng(
-        0,
-        0,
-      ),
+      target: LatLng(widget.lat, widget.long),
       zoom: 4.5,
     );
+    selectedLocation = initialPosition;
   }
 
   @override
@@ -40,52 +43,97 @@ class MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: Text('Location'),
       ),
-      body: Stack(
-        alignment: Alignment.center,
+      body: Column(
         children: <Widget>[
-          GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: initialPosition,
-            onMapCreated: _onMapCreated,
-            myLocationButtonEnabled: false,
-            myLocationEnabled: true,
-            onCameraMove: (position) {
-              selectedLocation = position;
-            },
-          ),
-          Icon(Icons.location_on),
-          Positioned(
-            right: 16,
-            bottom: 16,
-            child: FloatingActionButton(
-              onPressed: _getCurrentLocation,
-              child: Icon(
-                Icons.my_location,
-                color: Theme.of(context).primaryColor,
-              ),
-              backgroundColor: Colors.white,
-              elevation: 3,
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: initialPosition,
+                  onMapCreated: _onMapCreated,
+                  myLocationButtonEnabled: false,
+                  myLocationEnabled: true,
+                  onCameraMove: (position) {
+                    selectedLocation = position;
+                  },
+                ),
+                Icon(Icons.location_on),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      color: Colors.white,
+                    ),
+                    child: IconButton(
+                      onPressed: _getCurrentLocation,
+                      icon: Icon(
+                        Icons.my_location,
+                        color: Theme.of(context).primaryColor,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          Positioned(
-            bottom: 16,
-            child: RaisedButton(
-              child: Text(
-                'Submit',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                Firestore.instance.collection('orders').add({
-                  'username': 'byshy',
-                  'location': GeoPoint(
-                    selectedLocation.target.latitude,
-                    selectedLocation.target.longitude,
+          Container(
+            height: 70,
+            color: Colors.white,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 10,
+                ),
+                Text('Quantitiy'),
+                SizedBox(
+                  width: 10,
+                ),
+                DropdownButton<int>(
+                  hint: Text(quantity.toString()),
+                  items: <int>[1, 2, 3, 4]
+                      .map<DropdownMenuItem<int>>((int value) {
+                    return DropdownMenuItem<int>(
+                      value: value,
+                      child: Text(value.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (int newValue) {
+                    setState(() {
+                      quantity = newValue;
+                    });
+                  },
+                ),
+                Spacer(),
+                RaisedButton(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
                   ),
-                  'date': DateTime.now().toIso8601String(),
-                  'quantity': 10,
-                });
-                sendAndRetrieveMessage();
-              },
+                  onPressed: () async {
+                    Firestore.instance.collection('orders').add({
+                      'username': 'basel', //TODO make it dynamic
+                      'location': GeoPoint(
+                        selectedLocation.target.latitude,
+                        selectedLocation.target.longitude,
+                      ),
+                      'date': DateTime.now().toIso8601String(),
+                      'quantity': quantity,
+                    });
+                    sendAndRetrieveMessage();
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+              ],
             ),
           ),
         ],

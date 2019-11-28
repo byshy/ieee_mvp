@@ -3,8 +3,6 @@ import 'package:ieee_mvp/features/home/domain/entities/order.dart';
 import 'package:ieee_mvp/features/home/presentation/pages/map_page.dart';
 import 'package:location/location.dart';
 
-import 'map_ui.dart';
-
 class MainProvider extends StatefulWidget {
   final String location;
   final String mobile;
@@ -17,6 +15,8 @@ class MainProvider extends StatefulWidget {
 }
 
 class _MainProviderState extends State<MainProvider> {
+  var location = Location();
+
   bool isSubscribed = false;
 
   List<Order> orders = [];
@@ -140,8 +140,9 @@ class _MainProviderState extends State<MainProvider> {
                       Icons.add,
                       color: Colors.white,
                     ),
-                    onPressed: () {
-                      _pushPage(context, MapPage());
+                    onPressed: () async {
+                      LocationData _currentLocation = await location.getLocation();
+                      _pushPage(context, MapPage(lat: _currentLocation.latitude, long: _currentLocation.longitude,));
                     },
                   ),
                 ],

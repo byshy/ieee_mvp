@@ -20,8 +20,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       await _auth
           .createUserWithEmailAndPassword(email: event.email, password: event.password)
           .then((authRes) async {
-        Firestore.instance.collection('users').add({
-          'uid': authRes.user.uid,
+        Firestore.instance.collection('users').document(authRes.user.uid).collection('info').add({
           'name': event.userName,
           'number': event.number,
         });
