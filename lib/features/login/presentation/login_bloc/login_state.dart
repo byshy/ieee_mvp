@@ -19,6 +19,15 @@ class LoggedIn extends LoginState {
   List<Object> get props => [];
 }
 
+class LogInError extends LoginState {
+  final String errorMsg;
+
+  LogInError({this.errorMsg}) : super([errorMsg]);
+
+  @override
+  List<Object> get props => [errorMsg];
+}
+
 class LoggingOut extends LoginState {
   @override
   List<Object> get props => [];

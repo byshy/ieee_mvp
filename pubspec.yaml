@@ -8,7 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^2.1.1
   equatable: ^0.6.1
   shared_preferences: ^0.5.3+4
   location: ^2.3.5
@@ -25,6 +25,7 @@ dependencies:
   firebase_messaging: ^6.0.1
   cloud_firestore: ^0.12.10+2
   google_maps_flutter: ^0.5.21+12
+  firebase_auth: ^0.15.0+1
 
 dev_dependencies:
   flutter_test:

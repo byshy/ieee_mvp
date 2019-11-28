@@ -5,18 +5,16 @@ abstract class LoginEvent extends Equatable {
 }
 
 class Login extends LoginEvent {
-  final String username;
+  final String email;
   final String password;
 
-  Login({this.username, this.password}): super([username, password]);
+  Login({this.email, this.password}): super([email, password]);
 
   @override
-  // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [email, password];
 }
 
 class LogOut extends LoginEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

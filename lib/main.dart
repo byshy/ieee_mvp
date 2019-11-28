@@ -47,7 +47,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
 
     /// start the check
-    appBloc.dispatch(CheckLogin());
+    appBloc.add(CheckLogin());
   }
 
   @override

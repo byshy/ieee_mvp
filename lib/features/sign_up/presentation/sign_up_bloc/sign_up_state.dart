@@ -8,3 +8,13 @@ class InitialSignUpState extends SignUpState {
   @override
   List<Object> get props => [];
 }
+
+class SigningUp extends SignUpState {
+  @override
+  List<Object> get props => [];
+}
+
+class SignedUp extends SignUpState {
+  @override
+  List<Object> get props => [];
+}

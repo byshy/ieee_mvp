@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ieee_mvp/features/home/presentation/pages/home_route.dart';
 import 'package:ieee_mvp/features/login/presentation/login_bloc/bloc.dart';
+import 'package:ieee_mvp/features/sign_up/presentation/pages/sign_up_route.dart';
 
 class LoginRoute extends StatefulWidget {
   @override
@@ -16,11 +17,14 @@ class _LoginRouteState extends State<LoginRoute> {
 
   final FocusNode passwordFocus = FocusNode();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   bool hideText = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -56,7 +60,7 @@ class _LoginRouteState extends State<LoginRoute> {
                         FocusScope.of(context).requestFocus(passwordFocus);
                       },
                       decoration: InputDecoration(
-                        hintText: 'USERNAME',
+                        hintText: 'Email',
                         suffixIcon: Visibility(
                           visible: false,
                           child: Icon(
@@ -75,7 +79,7 @@ class _LoginRouteState extends State<LoginRoute> {
                       focusNode: passwordFocus,
                       obscureText: hideText,
                       decoration: InputDecoration(
-                        hintText: 'PASSWORD',
+                        hintText: 'Password',
                         suffixIcon: IconButton(
                           icon: hideText
                               ? Icon(Icons.visibility_off)
@@ -109,11 +113,17 @@ class _LoginRouteState extends State<LoginRoute> {
                                 MaterialPageRoute(
                                     builder: (_) => HomeRoute()),
                                 (_) => false);
+                          } else if (state is LogInError){
+                            _scaffoldKey.currentState.showSnackBar(
+                              SnackBar(
+                                content: Text('Something went wrong, please try again'),
+                              ),
+                            );
                           }
                         },
                         child: RaisedButton(
                           onPressed: () {
-                            loginBloc.dispatch(Login(username: username.text, password: password.text));
+                            loginBloc.add(Login(email: username.text, password: password.text));
                           },
                           child: BlocBuilder(
                             bloc: loginBloc,
@@ -143,7 +153,9 @@ class _LoginRouteState extends State<LoginRoute> {
                     ),
                     Center(
                       child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => SignUpRoute()));
+                        },
                         child: Text('Or Create Account'),
                       ),
                     ),

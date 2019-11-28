@@ -8,9 +8,6 @@
             android:name="io.flutter.app.FlutterApplication"
             android:label="ieee_mvp"
             android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY"
-                   android:value="AIzaSyClPnt79qgCCdJO7CMin9kEw1qg45PHI10"/>
-
         <!--        <meta-data android:name="com.mapbox.token" android:value="@string/mapbox_access_token"/>-->
         <activity
                 android:name=".MainActivity"
@@ -27,5 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyClPnt79qgCCdJO7CMin9kEw1qg45PHI10"/>
     </application>
 </manifest>

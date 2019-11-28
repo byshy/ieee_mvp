@@ -19,7 +19,7 @@ class Settings extends StatelessWidget {
         },
         child: RaisedButton(
           onPressed: () {
-            loginBloc.dispatch(LogOut());
+            loginBloc.add(LogOut());
           },
           child: BlocBuilder(
             bloc: loginBloc,
