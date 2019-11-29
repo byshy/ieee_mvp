@@ -183,7 +183,6 @@ class _BackdropState extends State<Backdrop>
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
     final Size panelSize = constraints.biggest;
     final double panelTop = 305;
-    //panelSize.height - panelTitleHeight - 245
 
     Animation<RelativeRect> panelAnimation = RelativeRectTween(
       begin: RelativeRect.fromLTRB(

@@ -178,6 +178,7 @@ class _MainProviderState extends State<MainProvider> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: UnicornDialer(
+//              animationDuration: 0,
               backgroundColor: Color(0x00FFFFFF),
               parentButtonBackground: Theme.of(context).primaryColor,
               orientation: UnicornOrientation.VERTICAL,

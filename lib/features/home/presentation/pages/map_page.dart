@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ieee_mvp/notification_service.dart';
@@ -11,7 +12,9 @@ class MapPage extends StatefulWidget {
   final double long;
 
   const MapPage({
-    Key key, this.lat, this.long,
+    Key key,
+    this.lat,
+    this.long,
   }) : super(key: key);
 
   @override
@@ -97,8 +100,8 @@ class MapPageState extends State<MapPage> {
                 ),
                 DropdownButton<int>(
                   hint: Text(quantity.toString()),
-                  items: <int>[1, 2, 3, 4]
-                      .map<DropdownMenuItem<int>>((int value) {
+                  items:
+                      <int>[1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
                     return DropdownMenuItem<int>(
                       value: value,
                       child: Text(value.toString()),
@@ -117,16 +120,25 @@ class MapPageState extends State<MapPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
+                    String name = await FirebaseAuth.instance
+                        .currentUser()
+                        .then((user) {
+                      return user.displayName;
+                    });
+                    var date = DateTime.now().toIso8601String();
                     Firestore.instance.collection('orders').add({
-                      'username': 'basel', //TODO make it dynamic
+                      'username': name,
                       'location': GeoPoint(
                         selectedLocation.target.latitude,
                         selectedLocation.target.longitude,
                       ),
-                      'date': DateTime.now().toIso8601String(),
+                      'date': date,
                       'quantity': quantity,
                     });
-                    sendAndRetrieveMessage();
+                    sendAndRetrieveMessage(name: name, quantity: quantity.toString(), location: GeoPoint(
+                      selectedLocation.target.latitude,
+                      selectedLocation.target.longitude,
+                    ), date: date);
                     Navigator.pop(context);
                   },
                 ),
