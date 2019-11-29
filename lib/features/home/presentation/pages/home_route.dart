@@ -32,7 +32,7 @@ class _HomeRouteState extends State<HomeRoute> {
     );
 
     var mainProviders = Category(
-      name: 'Main Provider',
+      name: 'Usual Provider',
     );
 
     var pastOrders = Category(
@@ -43,22 +43,12 @@ class _HomeRouteState extends State<HomeRoute> {
       name: 'Settings',
     );
 
-    var contactUs = Category(
-      name: 'Contact Us',
-    );
-
-    var aboutUs = Category(
-      name: 'About Us',
-    );
-
     setState(() {
       _defaultCategory = mainProviders;
       _categories.add(providers);
       _categories.add(mainProviders);
       _categories.add(pastOrders);
       _categories.add(settings);
-      _categories.add(contactUs);
-      _categories.add(aboutUs);
     });
   }
 

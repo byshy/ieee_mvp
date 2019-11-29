@@ -145,62 +145,67 @@ class _MainProviderState extends State<MainProvider> {
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 onPressed: () async {
                   Order order = await DbProvider.instance.getLastOrder();
-
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('Send last order?'),
-                          content:
-                              Text('''Last order quantity: ${order.quantity}
+                  if(order != null){
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Send last order?'),
+                            content:
+                            Text('''Last order quantity: ${order.quantity}
 Date: ${order.date}'''),
-                          actions: <Widget>[
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Cancel'),
-                            ),
-                            FlatButton(
-                              onPressed: () async {
-                                String name = await FirebaseAuth.instance
-                                    .currentUser()
-                                    .then((user) {
-                                  return user.displayName;
-                                });
-                                String date = DateTime.now().toIso8601String();
-                                Firestore.instance.collection('orders').add({
-                                  'username': name,
-                                  'location': GeoPoint(
-                                    order.lat,
-                                    order.long,
-                                  ),
-                                  'date': date,
-                                  'quantity': order.quantity,
-                                });
-                                DbProvider.instance.insertOrder(
-                                    long: order.lat,
-                                    lat: order.long,
-                                    quantity: order.quantity,
-                                    date: date);
-                                sendAndRetrieveMessage(
-                                    name: name,
-                                    quantity: order.quantity.toString(),
-                                    location: GeoPoint(
+                            actions: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              FlatButton(
+                                onPressed: () async {
+                                  String name = await FirebaseAuth.instance
+                                      .currentUser()
+                                      .then((user) {
+                                    return user.displayName;
+                                  });
+                                  String date = DateTime.now().toIso8601String();
+                                  Firestore.instance.collection('orders').add({
+                                    'username': name,
+                                    'location': GeoPoint(
                                       order.lat,
                                       order.long,
                                     ),
-                                    date: date);
-                                Navigator.of(context).pop();
-                                setState(() {});
-                              },
-                              child: Text('Send'),
-                              color:
-                                  Theme.of(context).primaryColor.withAlpha(50),
-                            ),
-                          ],
-                        );
-                      });
+                                    'date': date,
+                                    'quantity': order.quantity,
+                                  });
+                                  DbProvider.instance.insertOrder(
+                                      long: order.lat,
+                                      lat: order.long,
+                                      quantity: order.quantity,
+                                      date: date);
+                                  sendAndRetrieveMessage(
+                                      name: name,
+                                      quantity: order.quantity.toString(),
+                                      location: GeoPoint(
+                                        order.lat,
+                                        order.long,
+                                      ),
+                                      date: date);
+                                  Navigator.of(context).pop();
+                                  setState(() {});
+                                },
+                                child: Text('Send'),
+                                color:
+                                Theme.of(context).primaryColor.withAlpha(50),
+                              ),
+                            ],
+                          );
+                        });
+                  } else {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('No prevoius orders yet'),
+                    ));
+                  }
                 },
                 child: Text(
                   'Repeat last Order',
@@ -231,11 +236,8 @@ Date: ${order.date}'''),
             Expanded(
               child: FutureBuilder<List<Order>>(
                 future: DbProvider.instance.getOrders(),
-                // initialData: List(),
                 builder: (_, snapshot) {
-                  print('snapshot');
-                  print(snapshot.data);
-                  if (snapshot.hasData) {
+                  if (snapshot.data != null) {
                     return ListView.builder(
                       padding: EdgeInsets.only(bottom: 60),
                       itemCount: snapshot.data.length,

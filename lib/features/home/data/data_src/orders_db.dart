@@ -58,8 +58,6 @@ create table $ordersTable (
     Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(ordersTable, orderBy: '$columnDate DESC');
 
-    print(maps.toString());
-
     var result = List.generate(maps.length, (i) {
       return Order(
         id: maps[i][columnID],

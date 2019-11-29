@@ -29,6 +29,8 @@ class MapPageState extends State<MapPage> {
   var location = Location();
   CameraPosition selectedLocation;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   int quantity = 0;
 
   @override
@@ -36,7 +38,7 @@ class MapPageState extends State<MapPage> {
     super.initState();
     initialPosition = CameraPosition(
       target: LatLng(widget.lat, widget.long),
-      zoom: 4.5,
+      zoom: 17,
     );
     selectedLocation = initialPosition;
   }
@@ -44,6 +46,7 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Location'),
       ),
@@ -121,34 +124,38 @@ class MapPageState extends State<MapPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    String name =
-                        await FirebaseAuth.instance.currentUser().then((user) {
-                      return user.displayName;
-                    });
-                    String date = DateTime.now().toIso8601String();
-                    Firestore.instance.collection('orders').add({
-                      'username': name,
-                      'location': GeoPoint(
-                        selectedLocation.target.latitude,
-                        selectedLocation.target.longitude,
-                      ),
-                      'date': date,
-                      'quantity': quantity,
-                    });
-                    DbProvider.instance.insertOrder(
-                        long: selectedLocation.target.longitude,
-                        lat: selectedLocation.target.latitude,
-                        quantity: quantity,
-                        date: date);
-                    sendAndRetrieveMessage(
-                        name: name,
-                        quantity: quantity.toString(),
-                        location: GeoPoint(
+                    if(quantity != 0){
+                      String name =
+                      await FirebaseAuth.instance.currentUser().then((user) {
+                        return user.displayName;
+                      });
+                      String date = DateTime.now().toIso8601String();
+                      Firestore.instance.collection('orders').add({
+                        'username': name,
+                        'location': GeoPoint(
                           selectedLocation.target.latitude,
                           selectedLocation.target.longitude,
                         ),
-                        date: date);
-                    Navigator.pop(context);
+                        'date': date,
+                        'quantity': quantity,
+                      });
+                      DbProvider.instance.insertOrder(
+                          long: selectedLocation.target.longitude,
+                          lat: selectedLocation.target.latitude,
+                          quantity: quantity,
+                          date: date);
+                      sendAndRetrieveMessage(
+                          name: name,
+                          quantity: quantity.toString(),
+                          location: GeoPoint(
+                            selectedLocation.target.latitude,
+                            selectedLocation.target.longitude,
+                          ),
+                          date: date);
+                      Navigator.pop(context);
+                    } else {
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Can\'t have 0 quantity'),action: SnackBarAction(onPressed: (){}, label: 'OK',),));
+                    }
                   },
                 ),
                 SizedBox(
@@ -184,7 +191,7 @@ class MapPageState extends State<MapPage> {
             _currentLocation?.latitude,
             _currentLocation?.longitude,
           ),
-          zoom: 12,
+          zoom: 17,
         ),
       ),
     );

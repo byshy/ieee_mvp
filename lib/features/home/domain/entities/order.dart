@@ -30,4 +30,9 @@ class Order {
     long = map[columnLong];
   }
 
+  @override
+  String toString() {
+    return 'id $date $quantity $lat $long';
+  }
+
 }
