@@ -8,11 +8,13 @@ import 'package:sqflite/sqflite.dart';
 final String ordersTable = 'orders_table';
 final String columnID = 'id';
 final String columnDate = 'date';
-final String columnPrice = 'price';
+final String columnQuantity = 'price';
+final String columnLat = 'lat';
+final String columnLong = 'long';
 
 class DbProvider {
   static final String _databaseName = "mvp.db";
-  static final int _databaseVersion = 1;
+  static final int _databaseVersion = 3;
 
   DbProvider._privateConstructor();
 
@@ -38,15 +40,37 @@ class DbProvider {
 create table $ordersTable ( 
   $columnID integer primary key autoincrement, 
   $columnDate text not null,
-  $columnPrice text not null)
+  $columnQuantity text not null,
+  $columnLat real not null,
+  $columnLong real not null)
 ''');
   }
 
-  Future<int> insertOrder(String date, double price) async {
-    Order order = Order(date: date, price: price);
+  Future<int> insertOrder(
+      {String date, int quantity, double lat, double long}) async {
+    Order order =
+        Order(date: date, quantity: quantity, lat: lat, long: long);
     Database db = await database;
     order.id = await db.insert(ordersTable, order.toMap());
     return order.id;
+  }
+
+  Future<List<Order>> getOrders() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(ordersTable);
+
+    print(maps.toString());
+
+    return List.generate(maps.length, (i) {
+      print(maps[i][columnID].toString());
+      return Order(
+        id: maps[i][columnID].toInteger(),
+        date: maps[i][columnDate].toString(),
+        quantity: maps[i][columnQuantity].toInteger(),
+        lat: maps[i][columnLat].toDouble(),
+        long: maps[i][columnLong].toDouble(),
+      );
+    });
   }
 
   Future close() async {

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ieee_mvp/features/home/data/data_src/orders_db.dart';
 import 'package:ieee_mvp/notification_service.dart';
 import 'package:location/location.dart';
 
@@ -120,12 +121,11 @@ class MapPageState extends State<MapPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    String name = await FirebaseAuth.instance
-                        .currentUser()
-                        .then((user) {
+                    String name =
+                        await FirebaseAuth.instance.currentUser().then((user) {
                       return user.displayName;
                     });
-                    var date = DateTime.now().toIso8601String();
+                    String date = DateTime.now().toIso8601String();
                     Firestore.instance.collection('orders').add({
                       'username': name,
                       'location': GeoPoint(
@@ -135,10 +135,19 @@ class MapPageState extends State<MapPage> {
                       'date': date,
                       'quantity': quantity,
                     });
-                    sendAndRetrieveMessage(name: name, quantity: quantity.toString(), location: GeoPoint(
-                      selectedLocation.target.latitude,
-                      selectedLocation.target.longitude,
-                    ), date: date);
+                    DbProvider.instance.insertOrder(
+                        long: selectedLocation.target.longitude,
+                        lat: selectedLocation.target.latitude,
+                        quantity: quantity,
+                        date: date);
+                    sendAndRetrieveMessage(
+                        name: name,
+                        quantity: quantity.toString(),
+                        location: GeoPoint(
+                          selectedLocation.target.latitude,
+                          selectedLocation.target.longitude,
+                        ),
+                        date: date);
                     Navigator.pop(context);
                   },
                 ),

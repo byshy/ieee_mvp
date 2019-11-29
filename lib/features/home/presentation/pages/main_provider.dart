@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ieee_mvp/features/home/data/data_src/orders_db.dart';
 import 'package:ieee_mvp/features/home/domain/entities/order.dart';
 import 'package:ieee_mvp/features/home/presentation/pages/map_page.dart';
 import 'package:location/location.dart';
@@ -33,7 +34,10 @@ class _MainProviderState extends State<MainProvider> {
           heroTag: heroTag,
           backgroundColor: Colors.grey[500],
           mini: true,
-          child: Icon(iconData, color: Colors.white,),
+          child: Icon(
+            iconData,
+            color: Colors.white,
+          ),
           onPressed: onPressed,
         ));
   }
@@ -70,15 +74,11 @@ class _MainProviderState extends State<MainProvider> {
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page));
   }
 
+  Future<List<Order>> ordersFromDb;
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < 20; i++) {
-      orders.add(Order(
-        date: 'some date  #$i',
-        price: i * 1.25,
-      ));
-    }
+    ordersFromDb= DbProvider.instance.getOrders();
   }
 
   Widget buildHeader() {
@@ -160,13 +160,28 @@ class _MainProviderState extends State<MainProvider> {
               child: Divider(),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.only(bottom: 60),
-                itemCount: orders.length,
-                itemBuilder: (context, position) {
-                  return ListTile(
-                    title: Text(orders[position].date),
-                    trailing: Text('\$${orders[position].price.toString()}'),
+              child: FutureBuilder<List<Order>>(
+                future: ordersFromDb,
+               // initialData: List(),
+                builder: (_, snapshot) {
+                  print('snapshot');
+                  print(snapshot.data);
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      padding: EdgeInsets.only(bottom: 60),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, position) {
+                        Order order = snapshot.data[position];
+                        return ListTile(
+                          title: Text(order.date),
+                          trailing: Text('${order.quantity.toString()}'),
+                        );
+                      },
+                    );
+                  }
+
+                  return Center(
+                    child: Text('No Orders yet'),
                   );
                 },
               ),
@@ -182,7 +197,10 @@ class _MainProviderState extends State<MainProvider> {
               backgroundColor: Color(0x00FFFFFF),
               parentButtonBackground: Theme.of(context).primaryColor,
               orientation: UnicornOrientation.VERTICAL,
-              parentButton: Icon(Icons.more_vert, color: Colors.white,),
+              parentButton: Icon(
+                Icons.more_vert,
+                color: Colors.white,
+              ),
               childButtons: _getProfileMenu(),
             ),
           ),
