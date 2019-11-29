@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ieee_mvp/features/login/presentation/pages/login_page.dart';
 
 import 'core/app_bloc/bloc.dart';
 import 'features/home/presentation/pages/home_route.dart';
@@ -59,7 +60,7 @@ class _MainPageState extends State<MainPage> {
           if (state.isLoggedIn) {
             return HomeRoute();
           } else {
-            return LoginRoute();
+            return LoginPage();
           }
         }
         return Container();

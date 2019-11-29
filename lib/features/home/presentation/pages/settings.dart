@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ieee_mvp/features/home/presentation/home_bloc/bloc.dart';
+import 'package:ieee_mvp/features/login/presentation/pages/login_page.dart';
 import 'package:ieee_mvp/features/login/presentation/pages/login_route.dart';
 import 'package:ieee_mvp/features/login/presentation/login_bloc/bloc.dart';
 
@@ -66,7 +67,7 @@ class _SettingsState extends State<Settings> {
             listener: (BuildContext context, LoginState state) {
               if (state is LoggedOut) {
                 Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (_) => LoginRoute()), (_) => false);
+                    MaterialPageRoute(builder: (_) => LoginPage()), (_) => false);
               }
             },
             child: RaisedButton(

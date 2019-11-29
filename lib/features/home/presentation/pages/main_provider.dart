@@ -75,10 +75,11 @@ class _MainProviderState extends State<MainProvider> {
   }
 
   Future<List<Order>> ordersFromDb;
+
   @override
   void initState() {
     super.initState();
-    ordersFromDb= DbProvider.instance.getOrders();
+    ordersFromDb = DbProvider.instance.getOrders();
   }
 
   Widget buildHeader() {
@@ -162,7 +163,7 @@ class _MainProviderState extends State<MainProvider> {
             Expanded(
               child: FutureBuilder<List<Order>>(
                 future: ordersFromDb,
-               // initialData: List(),
+                // initialData: List(),
                 builder: (_, snapshot) {
                   print('snapshot');
                   print(snapshot.data);

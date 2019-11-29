@@ -8,13 +8,13 @@ import 'package:sqflite/sqflite.dart';
 final String ordersTable = 'orders_table';
 final String columnID = 'id';
 final String columnDate = 'date';
-final String columnQuantity = 'price';
+final String columnQuantity = 'quantity';
 final String columnLat = 'lat';
 final String columnLong = 'long';
 
 class DbProvider {
   static final String _databaseName = "mvp.db";
-  static final int _databaseVersion = 3;
+  static final int _databaseVersion = 4;
 
   DbProvider._privateConstructor();
 
@@ -40,7 +40,7 @@ class DbProvider {
 create table $ordersTable ( 
   $columnID integer primary key autoincrement, 
   $columnDate text not null,
-  $columnQuantity text not null,
+  $columnQuantity integer not null,
   $columnLat real not null,
   $columnLong real not null)
 ''');
@@ -48,8 +48,7 @@ create table $ordersTable (
 
   Future<int> insertOrder(
       {String date, int quantity, double lat, double long}) async {
-    Order order =
-        Order(date: date, quantity: quantity, lat: lat, long: long);
+    Order order = Order(date: date, quantity: quantity, lat: lat, long: long);
     Database db = await database;
     order.id = await db.insert(ordersTable, order.toMap());
     return order.id;
@@ -61,16 +60,16 @@ create table $ordersTable (
 
     print(maps.toString());
 
-    return List.generate(maps.length, (i) {
-      print(maps[i][columnID].toString());
+    var result = List.generate(maps.length, (i) {
       return Order(
-        id: maps[i][columnID].toInteger(),
+        id: maps[i][columnID],
         date: maps[i][columnDate].toString(),
-        quantity: maps[i][columnQuantity].toInteger(),
+        quantity: maps[i][columnQuantity],
         lat: maps[i][columnLat].toDouble(),
         long: maps[i][columnLong].toDouble(),
       );
     });
+    return result;
   }
 
   Future close() async {
