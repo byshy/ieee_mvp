@@ -13,16 +13,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'IEEE MVP',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
-          buttonColor: Color(0xFF1976D2),
+          primarySwatch: Colors.teal,
+          buttonColor: Colors.teal[200],
           textTheme:
               TextTheme(headline: TextStyle(color: Colors.white, fontSize: 18)),
-          accentColor: Color(0xFF1976D2),
-          cursorColor: Colors.blue,
+          accentColor: Colors.teal,
+          cursorColor: Colors.teal[200],
           inputDecorationTheme: InputDecorationTheme(
             focusedBorder: new UnderlineInputBorder(
               borderSide: new BorderSide(
-                color: Colors.blue,
+                color: Colors.teal[200],
               ),
             ),
           )),

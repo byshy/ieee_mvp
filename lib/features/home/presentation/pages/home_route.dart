@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ieee_mvp/features/home/domain/entities/category.dart';
+import 'package:ieee_mvp/features/home/presentation/home_bloc/bloc.dart';
 import 'package:ieee_mvp/features/home/presentation/widgets/export.dart';
 
 import 'export.dart';
@@ -41,10 +43,6 @@ class _HomeRouteState extends State<HomeRoute> {
       name: 'Settings',
     );
 
-    var shareApp = Category(
-      name: 'Share App',
-    );
-
     var contactUs = Category(
       name: 'Contact Us',
     );
@@ -59,7 +57,6 @@ class _HomeRouteState extends State<HomeRoute> {
       _categories.add(mainProviders);
       _categories.add(pastOrders);
       _categories.add(settings);
-      _categories.add(shareApp);
       _categories.add(contactUs);
       _categories.add(aboutUs);
     });
@@ -135,28 +132,31 @@ class _HomeRouteState extends State<HomeRoute> {
       AboutUs()
     ];
 
-    return Backdrop(
-      currentCategory:
-          _currentCategory == null ? _defaultCategory : _currentCategory,
-      frontPanel: widgets[index],
-      backPanel: listView,
-      frontTitle: Row(
-        children: <Widget>[
-          Text('${_currentCategory.name}',),
-          Spacer(),
-          if (index == 0)
-            IconButton(onPressed: (){}, icon: Icon(Icons.search),)
-        ],
-      ),
-      backTitle: Row(
-        children: <Widget>[
-          Text('Select a Category'),
-          Spacer(),
-          if (index == 0)
-            SizedBox(
-              height: 48,
-            )
-        ],
+    return BlocProvider.value(
+      value: HomeBloc(),
+      child: Backdrop(
+        currentCategory:
+            _currentCategory == null ? _defaultCategory : _currentCategory,
+        frontPanel: widgets[index],
+        backPanel: listView,
+        frontTitle: Row(
+          children: <Widget>[
+            Text('${_currentCategory.name}',),
+            Spacer(),
+            if (index == 0)
+              IconButton(onPressed: (){}, icon: Icon(Icons.search),)
+          ],
+        ),
+        backTitle: Row(
+          children: <Widget>[
+            Text('Select a Category'),
+            Spacer(),
+            if (index == 0)
+              SizedBox(
+                height: 48,
+              )
+          ],
+        ),
       ),
     );
   }

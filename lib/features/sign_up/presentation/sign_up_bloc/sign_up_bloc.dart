@@ -24,6 +24,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           'name': event.userName,
           'number': event.number,
         });
+
+        UserUpdateInfo info = UserUpdateInfo();
+        info.displayName = event.userName;
+
+        authRes.user.updateProfile(info);
+        await authRes.user.reload();
+        
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool('is_logged_in', true);
       });

@@ -23,6 +23,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       FirebaseUser user = await logIn(email: event.email, password: event.password);
       if(user != null){
         prefs.setBool('is_logged_in', true);
+        prefs.setString('name', user.displayName);
+        prefs.setString('email', user.email);
         yield LoggedIn();
       } else {
         yield LogInError();

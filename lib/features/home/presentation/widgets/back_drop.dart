@@ -100,9 +100,9 @@ class Backdrop extends StatefulWidget {
 class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
 
-  var color = ColorSwatch(0xFF2196F3, {
-    'highlight': Color(0xFFBBDEFB),
-    'splash': Color(0xFF2196F3),
+  var color = ColorSwatch(0xFF6AB7A8, {
+    'highlight': Color(0xFF6AB7A8),
+    'splash': Color(0xFF0ABC9B),
   });
 
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
@@ -181,9 +181,9 @@ class _BackdropState extends State<Backdrop>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
-    const double panelTitleHeight = 50.0;
     final Size panelSize = constraints.biggest;
-    final double panelTop = panelSize.height - panelTitleHeight - 200;
+    final double panelTop = 305;
+    //panelSize.height - panelTitleHeight - 245
 
     Animation<RelativeRect> panelAnimation = RelativeRectTween(
       begin: RelativeRect.fromLTRB(

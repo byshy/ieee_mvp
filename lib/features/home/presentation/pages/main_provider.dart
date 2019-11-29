@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:ieee_mvp/features/home/domain/entities/order.dart';
 import 'package:ieee_mvp/features/home/presentation/pages/map_page.dart';
 import 'package:location/location.dart';
+import 'package:unicorndial/unicorndial.dart';
 
 class MainProvider extends StatefulWidget {
   final String location;
   final String mobile;
   final bool hideName;
 
-  const MainProvider({Key key, this.location, this.mobile, this.hideName = false}) : super(key: key);
+  const MainProvider(
+      {Key key, this.location, this.mobile, this.hideName = false})
+      : super(key: key);
 
   @override
   _MainProviderState createState() => _MainProviderState();
@@ -21,6 +24,42 @@ class _MainProviderState extends State<MainProvider> {
 
   List<Order> orders = [];
 
+  Widget _profileOption(
+      {IconData iconData, String heroTag, Function onPressed, String label}) {
+    return UnicornButton(
+        hasLabel: true,
+        labelText: label,
+        currentButton: FloatingActionButton(
+          heroTag: heroTag,
+          backgroundColor: Colors.grey[500],
+          mini: true,
+          child: Icon(iconData, color: Colors.white,),
+          onPressed: onPressed,
+        ));
+  }
+
+  List<UnicornButton> _getProfileMenu() {
+    List<UnicornButton> children = [];
+
+    children.add(_profileOption(
+        iconData: Icons.rate_review,
+        onPressed: () {},
+        heroTag: 'tag3',
+        label: 'rate and review'));
+    children.add(_profileOption(
+        iconData: Icons.map,
+        onPressed: () {},
+        heroTag: 'tag2',
+        label: 'show on map'));
+    children.add(_profileOption(
+        iconData: Icons.call,
+        onPressed: () {},
+        heroTag: 'tag1',
+        label: 'call'));
+
+    return children;
+  }
+
   void _pushPage(BuildContext context, Widget page) async {
     final Location location = Location();
     final hasPermissions = await location.hasPermission();
@@ -28,14 +67,13 @@ class _MainProviderState extends State<MainProvider> {
       await location.requestPermission();
     }
 
-    Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (_) => page));
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page));
   }
 
   @override
   void initState() {
     super.initState();
-    for(int i = 0; i < 20; i++){
+    for (int i = 0; i < 20; i++) {
       orders.add(Order(
         date: 'some date  #$i',
         price: i * 1.25,
@@ -47,11 +85,13 @@ class _MainProviderState extends State<MainProvider> {
     return Column(
       children: <Widget>[
         ListTile(
-          title: widget.hideName ? Text(widget.location) : Text('Provider Name (local)'),
+          title: widget.hideName
+              ? Text(widget.location)
+              : Text('Provider Name (local)'),
           subtitle: !widget.hideName ? Text('Provider Location (local)') : null,
           trailing: IconButton(
             icon: Icon(Icons.beenhere,
-                color: isSubscribed ? Colors.blue : Colors.grey[900]),
+                color: isSubscribed ? Colors.teal[200] : Colors.grey[900]),
             onPressed: () {
               setState(() {
                 isSubscribed = !isSubscribed;
@@ -60,31 +100,47 @@ class _MainProviderState extends State<MainProvider> {
           ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            FlatButton(
-              color: Colors.grey[200],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0))
-              ),
-              onPressed: (){},
-              child: Icon(Icons.call),
+            SizedBox(
+              width: 10,
             ),
-            FlatButton(
-              color: Colors.grey[200],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0))
+            Expanded(
+              child: FlatButton(
+                color: Colors.teal,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                onPressed: () async {
+                  LocationData _currentLocation = await location.getLocation();
+                  _pushPage(
+                      context,
+                      MapPage(
+                        lat: _currentLocation.latitude,
+                        long: _currentLocation.longitude,
+                      ));
+                },
+                child: Text(
+                  'New Order',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              onPressed: (){},
-              child: Icon(Icons.map),
             ),
-            FlatButton(
-              color: Colors.grey[200],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0))
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: FlatButton(
+                color: Colors.teal,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                onPressed: () {},
+                child: Text(
+                  'Repeat last Order',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              onPressed: (){},
-              child: Icon(Icons.rate_review),
+            ),
+            SizedBox(
+              width: 10,
             ),
           ],
         ),
@@ -119,34 +175,14 @@ class _MainProviderState extends State<MainProvider> {
         ),
         Align(
           alignment: Alignment.bottomRight,
-          child: Container(
-            width: 100,
-            margin: EdgeInsets.all(10),
-            child: Material(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.refresh,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    onPressed: () async {
-                      LocationData _currentLocation = await location.getLocation();
-                      _pushPage(context, MapPage(lat: _currentLocation.latitude, long: _currentLocation.longitude,));
-                    },
-                  ),
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: UnicornDialer(
+              backgroundColor: Color(0x00FFFFFF),
+              parentButtonBackground: Theme.of(context).primaryColor,
+              orientation: UnicornOrientation.VERTICAL,
+              parentButton: Icon(Icons.more_vert, color: Colors.white,),
+              childButtons: _getProfileMenu(),
             ),
           ),
         )
