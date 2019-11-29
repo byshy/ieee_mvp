@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_mvp/features/home/data/data_src/orders_db.dart';
 import 'package:ieee_mvp/features/home/domain/entities/order.dart';
 import 'package:ieee_mvp/features/home/presentation/pages/map_page.dart';
+import 'package:ieee_mvp/notification_service.dart';
 import 'package:location/location.dart';
 import 'package:unicorndial/unicorndial.dart';
 
@@ -90,15 +93,22 @@ class _MainProviderState extends State<MainProvider> {
               ? Text(widget.location)
               : Text('Provider Name (local)'),
           subtitle: !widget.hideName ? Text('Provider Location (local)') : null,
-          trailing: IconButton(
-            icon: Icon(Icons.beenhere,
-                color: isSubscribed ? Colors.teal[200] : Colors.grey[900]),
-            onPressed: () {
-              setState(() {
-                isSubscribed = !isSubscribed;
-              });
-            },
+          trailing: InkWell(
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              color: isSubscribed
+                  ? Colors.white
+                  : Theme.of(context).primaryColor.withAlpha(50),
+              child: Text(
+                isSubscribed ? 'Subscribed' : 'Subscribe',
+              ),
+            ),
           ),
+          onTap: () {
+            setState(() {
+              isSubscribed = !isSubscribed;
+            });
+          },
         ),
         Row(
           children: <Widget>[
@@ -133,7 +143,65 @@ class _MainProviderState extends State<MainProvider> {
                 color: Colors.teal,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                onPressed: () {},
+                onPressed: () async {
+                  Order order = await DbProvider.instance.getLastOrder();
+
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Send last order?'),
+                          content:
+                              Text('''Last order quantity: ${order.quantity}
+Date: ${order.date}'''),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            FlatButton(
+                              onPressed: () async {
+                                String name = await FirebaseAuth.instance
+                                    .currentUser()
+                                    .then((user) {
+                                  return user.displayName;
+                                });
+                                String date = DateTime.now().toIso8601String();
+                                Firestore.instance.collection('orders').add({
+                                  'username': name,
+                                  'location': GeoPoint(
+                                    order.lat,
+                                    order.long,
+                                  ),
+                                  'date': date,
+                                  'quantity': order.quantity,
+                                });
+                                DbProvider.instance.insertOrder(
+                                    long: order.lat,
+                                    lat: order.long,
+                                    quantity: order.quantity,
+                                    date: date);
+                                sendAndRetrieveMessage(
+                                    name: name,
+                                    quantity: order.quantity.toString(),
+                                    location: GeoPoint(
+                                      order.lat,
+                                      order.long,
+                                    ),
+                                    date: date);
+                                Navigator.of(context).pop();
+                                setState(() {});
+                              },
+                              child: Text('Send'),
+                              color:
+                                  Theme.of(context).primaryColor.withAlpha(50),
+                            ),
+                          ],
+                        );
+                      });
+                },
                 child: Text(
                   'Repeat last Order',
                   style: TextStyle(color: Colors.white),
@@ -162,7 +230,7 @@ class _MainProviderState extends State<MainProvider> {
             ),
             Expanded(
               child: FutureBuilder<List<Order>>(
-                future: ordersFromDb,
+                future: DbProvider.instance.getOrders(),
                 // initialData: List(),
                 builder: (_, snapshot) {
                   print('snapshot');

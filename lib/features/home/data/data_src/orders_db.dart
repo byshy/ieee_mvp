@@ -56,7 +56,7 @@ create table $ordersTable (
 
   Future<List<Order>> getOrders() async {
     Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(ordersTable);
+    final List<Map<String, dynamic>> maps = await db.query(ordersTable, orderBy: '$columnDate DESC');
 
     print(maps.toString());
 
@@ -69,6 +69,24 @@ create table $ordersTable (
         long: maps[i][columnLong].toDouble(),
       );
     });
+    return result;
+  }
+
+  Future<Order> getLastOrder() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query(ordersTable, orderBy: '$columnID DESC', limit: 1);
+
+    print(maps.toString());
+
+    if (maps.isEmpty) return null;
+    var result = Order(
+      id: maps[0][columnID],
+      date: maps[0][columnDate].toString(),
+      quantity: maps[0][columnQuantity],
+      lat: maps[0][columnLat].toDouble(),
+      long: maps[0][columnLong].toDouble(),
+    );
     return result;
   }
 
