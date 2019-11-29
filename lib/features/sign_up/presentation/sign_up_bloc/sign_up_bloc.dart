@@ -18,9 +18,14 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     if (event is SignUp) {
       yield SigningUp();
       await _auth
-          .createUserWithEmailAndPassword(email: event.email, password: event.password)
+          .createUserWithEmailAndPassword(
+              email: event.email, password: event.password)
           .then((authRes) async {
-        Firestore.instance.collection('users').document(authRes.user.uid).collection('info').add({
+        Firestore.instance
+            .collection('users')
+            .document(authRes.user.uid)
+            .collection('info')
+            .add({
           'name': event.userName,
           'number': event.number,
         });
@@ -30,8 +35,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
         authRes.user.updateProfile(info);
         await authRes.user.reload();
-        
+
         SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('name', event.userName);
+        prefs.setString('email', event.email);
         prefs.setBool('is_logged_in', true);
       });
       yield SignedUp();
