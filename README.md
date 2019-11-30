@@ -5,7 +5,8 @@ the customer can order protable water from his provider or any other provider in
 using this app makes the proccess of getting clean water easier and faster !
 
 ## Getting Started
-![GitHub Logo](/1be7acac-9723-44e5-ab77-449689d0bb88.jfif) (/2.jfif)
+ ![GitHub Logo](/61bdbcc8-be23-42ee-827f-e1aaf2a6c329.jfif) 
+ ![alt text](/ec6b8f14-6a00-4dcc-906b-636ec8fdb226.jfif) 
 
 
 ## List of the Contributors on GitHub
