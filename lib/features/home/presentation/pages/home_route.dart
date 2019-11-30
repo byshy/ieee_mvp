@@ -1,9 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ieee_mvp/features/home/domain/entities/category.dart';
 import 'package:ieee_mvp/features/home/presentation/home_bloc/bloc.dart';
+import 'package:ieee_mvp/features/home/presentation/pages/confirmation.dart';
 import 'package:ieee_mvp/features/home/presentation/widgets/export.dart';
+import 'package:ieee_mvp/main.dart';
 
 import 'export.dart';
 
@@ -16,7 +19,51 @@ class _HomeRouteState extends State<HomeRoute> {
   Category _defaultCategory;
   Category _currentCategory;
 
+   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   final _categories = <Category>[];
+
+  @override
+  void initState() {
+    _firebaseMessaging = FirebaseMessaging();
+    super.initState();
+    _firebaseMessaging.requestNotificationPermissions();
+    print('byshy');
+    print('byshy $_firebaseMessaging');
+//    _firebaseMessaging.subscribeToTopic('/topics/user');
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('onMessage');
+        goToMapFromNotification(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('onLaunch');
+        goToMapFromNotification(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('onResume');
+        goToMapFromNotification(message);
+      },
+    );
+  }
+
+  Future<void> goToMapFromNotification(Map message) async {
+    print("AAAa _$message");
+    try {
+      WidgetsBinding.instance.addPostFrameCallback((duration) {
+        navigatorState.currentState.push(
+          MaterialPageRoute(
+            builder: (_) => Confirmation(
+              message: message.toString(),
+            ),
+          ),
+        );
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Future<void> didChangeDependencies() async {
@@ -58,31 +105,6 @@ class _HomeRouteState extends State<HomeRoute> {
     });
   }
 
-  Widget _buildCategoryWidgets() {
-    return OrientationBuilder(builder: (context, orientation) {
-      if (orientation == Orientation.portrait) {
-        return ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            var _category = _categories[index];
-            return CategoryTile(category: _category, onTap: _onCategoryTap);
-          },
-          itemCount: _categories.length,
-        );
-      } else {
-        return GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 3.0,
-          children: _categories.map((Category c) {
-            return CategoryTile(
-              category: c,
-              onTap: _onCategoryTap,
-            );
-          }).toList(),
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_categories.isEmpty) {
@@ -101,10 +123,16 @@ class _HomeRouteState extends State<HomeRoute> {
         right: 8.0,
         bottom: 48.0,
       ),
-      child: _buildCategoryWidgets(),
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          var _category = _categories[index];
+          return CategoryTile(category: _category, onTap: _onCategoryTap);
+        },
+        itemCount: _categories.length,
+      ),
     );
 
-    _currentCategory??= _defaultCategory;
+    _currentCategory ??= _defaultCategory;
 
     int index = _categories.indexOf(_currentCategory);
 
@@ -113,13 +141,6 @@ class _HomeRouteState extends State<HomeRoute> {
       MainProvider(),
       PastOrders(),
       Settings(),
-      Center(
-          child: Text(
-            'Share app',
-            style: TextStyle(fontSize: 30),
-          )),
-      ContactUs(),
-      AboutUs()
     ];
 
     return BlocProvider.value(
@@ -131,10 +152,13 @@ class _HomeRouteState extends State<HomeRoute> {
         backPanel: listView,
         frontTitle: Row(
           children: <Widget>[
-            Text('${_currentCategory.name}',),
+            Text('${_currentCategory.name}'),
             Spacer(),
             if (index == 0)
-              IconButton(onPressed: (){}, icon: Icon(Icons.search),)
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.search),
+              )
           ],
         ),
         backTitle: Row(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './bloc.dart';
 
@@ -9,6 +10,7 @@ enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   SharedPreferences prefs;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   LoginState get initialState => InitialLoginState();
@@ -25,6 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         prefs.setBool('is_logged_in', true);
         prefs.setString('name', user.displayName);
         prefs.setString('email', user.email);
+        _firebaseMessaging.subscribeToTopic('/topics/user');
         yield LoggedIn();
       } else {
         yield LogInError();

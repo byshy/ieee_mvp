@@ -4,7 +4,8 @@ import 'package:ieee_mvp/features/login/presentation/pages/login_page.dart';
 
 import 'core/app_bloc/bloc.dart';
 import 'features/home/presentation/pages/home_route.dart';
-import 'features/login/presentation/pages/login_route.dart';
+
+GlobalKey<NavigatorState> navigatorState = GlobalKey<NavigatorState>();
 
 void main() => runApp(MyApp());
 
@@ -12,12 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorState,
       title: 'IEEE MVP',
       theme: ThemeData(
           primarySwatch: Colors.teal,
           buttonColor: Colors.teal[200],
           textTheme:
-              TextTheme(headline: TextStyle(color: Colors.white, fontSize: 18)),
+          TextTheme(headline: TextStyle(color: Colors.white, fontSize: 18)),
           accentColor: Colors.teal,
           cursorColor: Colors.teal[200],
           inputDecorationTheme: InputDecorationTheme(
