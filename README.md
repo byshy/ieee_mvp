@@ -3,8 +3,10 @@
 Utilities app for connection customers and protable water providers in countries suffer from lack of portable water services.
 the customer can order protable water from his provider or any other provider in his area, following his provider truck on map.
 using this app makes the proccess of getting clean water easier and faster !
-
+## GENERAL PREVIEW DARASA LECTURER
+![GitHub Logo](/61bdbcc8-be23-42ee-827f-e1aaf2a6c329.jfif) ![alt text](/ec6b8f14-6a00-4dcc-906b-636ec8fdb226.jfif)  
 ## Getting Started
+signing up if you dont have previous account 
  ![GitHub Logo](/61bdbcc8-be23-42ee-827f-e1aaf2a6c329.jfif) 
  ![alt text](/ec6b8f14-6a00-4dcc-906b-636ec8fdb226.jfif) 
 
