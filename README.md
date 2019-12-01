@@ -85,3 +85,10 @@ after the submission this will be changed.
 <img src="/app_video1.jfif" width="280" height="470" /> | <img src="/60d6aa87-c012-47c1-b255-0cd26ee078b9.jfif" width="280" height="470" float="100" />  | <img src="/4a5c2c0a-d44a-490b-b4f2-0ade1f7da362.jfif" width="280" height="470" />
 
 <img src="/5ea8ef8d-e2f4-47a8-9218-824b5761562d.jfif" width="280" height="470" /> | <img src="/ea16d4bc-7876-4ffa-b585-2384bd603ac0.jfif" width="280" height="470" float="100" />  | <img src="/faa742f9-7182-4f8f-b33f-f69fa9e7226b.jfif" width="280" height="470" />
+
+
+## Disclaimer
+Voluny is a product designed and developed by Marton Zeisler and Uyen Vicky Vo. All photos used in the app or promotional collaterals are open-source and royalty free from Unsplash.com.
+
+## Summary
+| Utilities Software  | Utilities | Team Name: Utilities Software | Utilities Software project service provider connticting customers with portable water & gas providers in the country  | LICENSE |Mohammad Isleem | Basel Hadrous
