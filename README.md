@@ -30,8 +30,8 @@ aiming to cover the largest number of mobile applications users.
 
 
 ## List of the Contributors on GitHub (Team)
-[Contributors](https://github.com/byshy)
-[Contributors](https://github.com/mohammadeslim22)
+[Basel Hadrous](https://github.com/byshy)
+[Mohammad Isleem](https://github.com/mohammadeslim22)
 
 ## Installation Guidelines (if applicable)
 the project is built on Android Studio platform, you need to download the Studio & sdk for android beside Java as well
