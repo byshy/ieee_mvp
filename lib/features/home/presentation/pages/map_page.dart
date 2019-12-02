@@ -129,7 +129,7 @@ class MapPageState extends State<MapPage> {
                       await FirebaseAuth.instance.currentUser().then((user) {
                         return user.displayName;
                       });
-                      String date = DateTime.now().toIso8601String();
+                      String date = '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
                       Firestore.instance.collection('orders').add({
                         'username': name,
                         'location': GeoPoint(

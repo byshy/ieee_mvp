@@ -24,7 +24,6 @@ dependencies:
   firebase_messaging: ^6.0.1
   cloud_firestore: ^0.12.10+2
   google_maps_flutter: ^0.5.21+12
-  firebase_analytics: ^5.0.6
   firebase_auth: ^0.15.0+1
   unicorndial: ^1.1.5
   font_awesome_flutter: ^8.5.0

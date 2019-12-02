@@ -28,10 +28,6 @@ class _HomeRouteState extends State<HomeRoute> {
     _firebaseMessaging = FirebaseMessaging();
     super.initState();
     _firebaseMessaging.requestNotificationPermissions();
-    print('byshy');
-    print('byshy $_firebaseMessaging');
-//    _firebaseMessaging.subscribeToTopic('/topics/user');
-
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage');
