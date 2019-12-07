@@ -19,7 +19,7 @@ using this app makes the proccess of getting clean water easier and faster !
 *Table
 
 ## GENERAL PREVIEW Utilities 
-<img src="/4a5c2c0a-d44a-490b-b4f2-0ade1f7da362.jfif" width="280" height="470" /> | <img src="/5ea8ef8d-e2f4-47a8-9218-824b5761562d.jfif" width="280" height="470" float="100" /> | <img src="/1be7acac-9723-44e5-ab77-449689d0bb88.jfif" width="280" height="470" /> 
+<img src="https://i.ibb.co/XZYFHTh/4a5c2c0a-d44a-490b-b4f2-0ade1f7da362.jpg" width="280" height="470" /> | <img src="/5ea8ef8d-e2f4-47a8-9218-824b5761562d.jfif" width="280" height="470" float="100" /> | <img src="/1be7acac-9723-44e5-ab77-449689d0bb88.jfif" width="280" height="470" /> 
  
 
 
